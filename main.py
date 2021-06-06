@@ -30,8 +30,3 @@ def get_db() -> Session:
 import exceptions
 import auth
 import userTypeChange
-
-
-@app.get("/hello_world")
-def hello_world(user=Depends(manager)):
-    return {"hello": "world"}
