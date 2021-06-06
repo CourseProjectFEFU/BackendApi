@@ -26,7 +26,7 @@ def verify_password(plain_password: str, password_salt: bytes, password_hash: by
 
 
 @manager.user_loader
-def get_user_by_email(identifier: str):
+async def get_user(identifier: str):
     db = next(get_db())
     return (
         db.query(models.User)
@@ -37,37 +37,40 @@ def get_user_by_email(identifier: str):
     )
 
 
-def get_user_by_nickname(nickname: str):
-    db = next(get_db())
-    return db.query(models.User).filter_by(nickname=nickname).one_or_none()
-
-
-@app.post("/api/v1/login")
-def login(response: JSONResponse, data: OAuth2PasswordRequestForm = Depends()):
+@app.post("/api/v1/login", response_model=schemas.RequestResult)
+async def login(response: JSONResponse, data: OAuth2PasswordRequestForm = Depends()):
     email = data.username
     password = data.password
 
-    user: models.User = get_user_by_email(email)
+    user: models.User = await get_user(email)
+    print(user)
     if not user:
         raise InvalidCredentialsException
     elif not verify_password(password, user.salt, user.password):
         raise InvalidCredentialsException
+    elif user.type == models.UserType.banned:
+        raise exceptions.UserIsBanned
 
     access_token = manager.create_access_token(
         data={"sub": user.email, "rol": user.type.value}
     )
-    response = JSONResponse(status_code=200)
+    response = JSONResponse(status_code=200, content={"result": "success"})
     manager.set_cookie(response, access_token)
     return response
 
 
 @app.post("/api/v1/register", response_model=schemas.RequestResult)
-def new_user_register(user: schemas.CreateUser, db_session: Session = Depends(get_db)):
-    db_user = get_user_by_email(user.email)
+async def new_user_register(
+    user: schemas.CreateUser, db_session: Session = Depends(get_db)
+):
+    db_user = await get_user(user.email)
+    print(db_user)
     if not db_user:
-        db_user = get_user_by_nickname(user.nickname)
+        db_user = await get_user(user.nickname)
+        print(db_user)
     else:
         raise exceptions.EmailAlreadyExists
+    print(db_user)
     if db_user:
         raise exceptions.NicknameAlreadyExists
 

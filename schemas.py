@@ -3,7 +3,8 @@ from typing import Optional
 import re
 
 # for validating an Email
-regex = '^(\w|\.|\_|\-)+[@](\w|\_|\-|\.)+[.]\w{2,3}$'
+regex = "^(\w|\.|\_|\-)+[@](\w|\_|\-|\.)+[.]\w{2,3}$"
+
 
 class User(BaseModel):
     first_name: str
@@ -25,8 +26,23 @@ class User(BaseModel):
 class CreateUser(User):
     password: str
 
+    @validator("password")
+    def validate_password(cls, value):
+        if re.fullmatch(
+            "^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!#%*?&]{6,20}$",
+            value,
+        ):
+            return value
+        raise ValueError("Password is too easy or contains inappropriate symbols")
+
 
 class RequestResult(BaseModel):
-    result: str = Field(description="\"success\" or \"error\"")
+    result: str = Field(description='"success" or "error"')
     error_description: Optional[str] = Field(description="In case of error")
-    success_description: Optional[str] = Field(description="Sometimes in case of success")
+    success_description: Optional[str] = Field(
+        description="Sometimes in case of success"
+    )
+
+
+class ChangingTypeUser(BaseModel):
+    identifier: str = Field(description="email or nickname")

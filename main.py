@@ -29,6 +29,7 @@ def get_db() -> Session:
 
 import exceptions
 import auth
+import userTypeChange
 
 
 @app.get("/hello_world")
