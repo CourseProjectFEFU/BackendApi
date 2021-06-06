@@ -17,28 +17,29 @@ import schemas
 
 
 def hash_password(password: str, salt: bytes = os.urandom(32)) -> (bytes, bytes):
-    key = hashlib.pbkdf2_hmac('sha256', password.encode('utf-8'), salt, 10000)
+    key = hashlib.pbkdf2_hmac("sha256", password.encode("utf-8"), salt, 10000)
     return key, salt
 
 
 def verify_password(plain_password: str, password_salt: bytes, password_hash: bytes):
-    if password_hash != hash_password(plain_password, password_salt)[0]:
-        return False
-    return True
+    return password_hash == hash_password(plain_password, password_salt)[0]
 
 
 @manager.user_loader
 def get_user_by_email(identifier: str):
     db = next(get_db())
-    user = db.query(models.User).filter(or_(models.User.email == identifier, models.User.nickname == identifier)).\
-        one_or_none()
-    return user
+    return (
+        db.query(models.User)
+        .filter(
+            or_(models.User.email == identifier, models.User.nickname == identifier)
+        )
+        .one_or_none()
+    )
 
 
 def get_user_by_nickname(nickname: str):
     db = next(get_db())
-    user = db.query(models.User).filter_by(nickname=nickname).one_or_none()
-    return user
+    return db.query(models.User).filter_by(nickname=nickname).one_or_none()
 
 
 @app.post("/api/v1/login")
@@ -79,5 +80,8 @@ def new_user_register(user: schemas.CreateUser, db_session: Session = Depends(ge
         db_session.flush()
     except sqlalchemyexceptions.SQLAlchemyError as inst:
         print(inst)
-        return JSONResponse(status_code=500, content={"result": "error", "error_description": "server_error"})
+        return JSONResponse(
+            status_code=500,
+            content={"result": "error", "error_description": "server_error"},
+        )
     return JSONResponse(status_code=200, content={"result": "success"})
