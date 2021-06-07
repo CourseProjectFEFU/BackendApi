@@ -46,3 +46,18 @@ class RequestResult(BaseModel):
 
 class ChangingTypeUser(BaseModel):
     identifier: str = Field(description="email or nickname")
+
+
+class UserForSearchAnswer(BaseModel):
+    first_name: Optional[str]
+    last_name: Optional[str]
+    nickname: Optional[str]
+    email: Optional[str]
+
+    class Config:
+        orm_mode = True
+
+
+class UserForSearchRequest(UserForSearchAnswer):
+    offset: Optional[int] = 0
+    count: Optional[int] = 15

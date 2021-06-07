@@ -30,6 +30,7 @@ def get_db() -> Session:
 import exceptions
 import auth
 import userTypeChange
+import searchs
 
 
 @app.get("/")
