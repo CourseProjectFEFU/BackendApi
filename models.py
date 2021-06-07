@@ -47,7 +47,7 @@ article_category_association_table = Table(
 class User(Base):
     __tablename__ = "users"
 
-    id = Column(Integer, primary_key=True, nullable=False, autoincrement=True)
+    id = Column(Integer, primary_key=True, nullable=False)
     type = Column(Enum(UserType), default=UserType.user, nullable=False)
     email = Column(String, unique=True)
     first_name = Column(String, nullable=False)
@@ -61,7 +61,7 @@ class User(Base):
 class Article(Base):
     __tablename__ = "articles"
 
-    id = Column(Integer, primary_key=True, nullable=False, autoincrement=True)
+    id = Column(Integer, primary_key=True, nullable=False)
     content = Column(Text, nullable=False)
     creation_date = Column(DateTime, nullable=False, default=datetime.now)
     publication_date = Column(DateTime, nullable=True)
@@ -93,7 +93,7 @@ class Comment(Base):
 class Category(Base):
     __tablename__ = "categories"
 
-    id = Column(Integer, primary_key=True, nullable=False, autoincrement=True)
+    id = Column(Integer, primary_key=True, nullable=False)
     name = Column(String, unique=True, nullable=False)
 
 
