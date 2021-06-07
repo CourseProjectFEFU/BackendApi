@@ -25,7 +25,7 @@ def ban_user(
         )
         .one_or_none()
     )
-    if not db_deleting_user:
+    if db_deleting_user is None:
         raise exceptions.UserDoesNotExists
     if db_deleting_user.type.value >= user.type.value:
         return JSONResponse(

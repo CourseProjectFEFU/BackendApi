@@ -12,12 +12,10 @@ from sqlalchemy import (
     Table,
     Text,
     Enum,
+    LargeBinary
 )
 
-from sqlalchemy.dialects import postgresql
 from sqlalchemy.orm import relationship
-from sqlalchemy.types import UserDefinedType
-from sqlalchemy import func
 import enum
 
 from db import Base
@@ -54,8 +52,8 @@ class User(Base):
     last_name = Column(String, nullable=False)
     nickname = Column(String, nullable=False, unique=True)
     account_image = Column(String)
-    password = Column(Binary, nullable=False)
-    salt = Column(Binary, nullable=False)
+    password = Column(LargeBinary, nullable=False)
+    salt = Column(LargeBinary, nullable=False)
 
 
 class Article(Base):

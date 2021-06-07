@@ -30,3 +30,8 @@ def get_db() -> Session:
 import exceptions
 import auth
 import userTypeChange
+
+
+@app.get("/")
+async def hello_world():
+    return {"Hello": "World"}
