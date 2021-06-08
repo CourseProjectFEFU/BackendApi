@@ -37,7 +37,7 @@ async def get_user(identifier: str):
     )
 
 
-@app.post("/api/v1/login", response_model=schemas.RequestResult)
+@app.post("/api/v1/login", response_model=schemas.LoginResult)
 async def login(response: JSONResponse, data: OAuth2PasswordRequestForm = Depends()):
     email = data.username
     password = data.password
@@ -54,7 +54,7 @@ async def login(response: JSONResponse, data: OAuth2PasswordRequestForm = Depend
     access_token = manager.create_access_token(
         data={"sub": user.email, "rol": user.type.value}
     )
-    response = JSONResponse(status_code=200, content={"result": "success"})
+    response = JSONResponse(status_code=200, content={"result": "success", "id": user.id, "username": user.nickname})
     manager.set_cookie(response, access_token)
     return response
 

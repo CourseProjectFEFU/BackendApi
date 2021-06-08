@@ -61,3 +61,8 @@ class UserForSearchAnswer(BaseModel):
 class UserForSearchRequest(UserForSearchAnswer):
     offset: Optional[int] = 0
     count: Optional[int] = 15
+
+
+class LoginResult(RequestResult):
+    id: Optional[int]
+    username: Optional[int]
