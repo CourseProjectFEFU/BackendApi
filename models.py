@@ -60,6 +60,7 @@ class Article(Base):
     __tablename__ = "articles"
 
     id = Column(Integer, primary_key=True, nullable=False)
+    header = Column(String, nullable=False)
     content = Column(Text, nullable=False)
     creation_date = Column(DateTime, nullable=False, default=datetime.now)
     publication_date = Column(DateTime, nullable=True)

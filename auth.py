@@ -27,7 +27,7 @@ def verify_password(plain_password: str, password_salt: bytes, password_hash: by
 
 @manager.user_loader
 async def get_user(identifier: str):
-    db = next(get_db())
+    db: Session = next(get_db())
     return (
         db.query(models.User)
         .filter(
