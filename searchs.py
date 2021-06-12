@@ -23,7 +23,7 @@ def get_users(search_user: schemas.UserForSearchRequest, user: models.User = Dep
 
 
 @app.post("/api/v1/search_articles_ordianry", response_model=List[schemas.Article])
-def search_article_ordinary(search_props: schemas.SearchArticle, user: models.User = Depends(manager),
+def search_article_ordinary(search_props: schemas.SearchArticle,
                    db_session: Session = Depends(get_db)):
     if search_props.status != models.ModerationStatus.published:
         raise exceptions.PermissionDenied
