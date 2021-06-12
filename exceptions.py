@@ -74,9 +74,10 @@ async def user_is_banned_exception_handler(request: Request, ex: PermissionDenie
 
 
 @app.exception_handler(ArticleDoesNotExists)
-async def article_does_nor_exists_exception_handler(request: Request, ex: ArticleDoesNotExists):
-    return JSONResponse(status_code=405,
-                        content={
-                            "result": "error",
-                            "error_description": "Article does not exists"
-                        })
+async def article_does_nor_exists_exception_handler(
+    request: Request, ex: ArticleDoesNotExists
+):
+    return JSONResponse(
+        status_code=405,
+        content={"result": "error", "error_description": "Article does not exists"},
+    )

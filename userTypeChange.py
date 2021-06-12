@@ -72,25 +72,29 @@ def add_moderator(
 
 @app.post("/api/v1/unban_user", response_model=schemas.RequestResult)
 async def unban_user(
-        unbaning_user: schemas.ChangingTypeUser, 
-        user: models.User = Depends(manager), 
-        db_session: Session = Depends(get_db)
+    unbaning_user: schemas.ChangingTypeUser,
+    user: models.User = Depends(manager),
+    db_session: Session = Depends(get_db),
 ):
     if user.type.value < models.UserType.moderator.value:
         raise exceptions.PermissionDenied
-    
-    db_user = db_session.query(models.User).filter(
-        or_(
-            models.User.email == unbaning_user.identifier,
-            models.User.nickname == unbaning_user.identifier
+
+    db_user = (
+        db_session.query(models.User)
+        .filter(
+            or_(
+                models.User.email == unbaning_user.identifier,
+                models.User.nickname == unbaning_user.identifier,
             )
-    ).one_or_none()
-    
+        )
+        .one_or_none()
+    )
+
     if db_user is None:
         raise exceptions.UserDoesNotExists
-    
+
     db_user.type = models.UserType.user
     db_session.commit()
     db_session.flush()
-    
-    return JSONResponse(status_code=200, content={"result":"success"})
+
+    return JSONResponse(status_code=200, content={"result": "success"})

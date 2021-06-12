@@ -25,8 +25,7 @@ origins = [
     "http://localhost",
     "http://127.0.0.1:8080",
     "http://localhost:8080",
-    "https://course-project-front.herokuapp.com"
-
+    "https://course-project-front.herokuapp.com",
 ]
 
 app.add_middleware(
@@ -35,10 +34,10 @@ app.add_middleware(
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
-#Access-Control-Expose-Headers
+    # Access-Control-Expose-Headers
     expose_headers=["set-cookie"],
-
 )
+
 
 def get_db() -> Session:
     db = SessionLocal()

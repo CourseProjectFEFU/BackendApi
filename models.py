@@ -11,7 +11,7 @@ from sqlalchemy import (
     Table,
     Text,
     Enum,
-    LargeBinary
+    LargeBinary,
 )
 
 from sqlalchemy.orm import relationship
@@ -68,8 +68,8 @@ class Article(Base):
     status = Column(
         Enum(ModerationStatus), nullable=False, default=ModerationStatus.waiting
     )
-    
-    
+
+
 class ArticleWithComments(Article):
     comments = relationship("Comment")
 
