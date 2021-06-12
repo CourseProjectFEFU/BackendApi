@@ -31,7 +31,8 @@ def search_article_ordinary(search_props: schemas.SearchArticle, user: models.Us
     return db_session.query(models.Article).filter(and_(
         models.Article.header.like('%'+search_props.header+'%'),
         models.Article.content.like('%'+search_props.content+'%'),
-        models.Article.author_id.like(search_props.author_id)
+        models.Article.author_id.like(search_props.author_id),
+        models.Article.id.like(search_props.id) if search_props.id else True
     )).order_by(desc(models.Article.publication_date)).all()
 
 
@@ -44,10 +45,6 @@ def search_articles_moderation(search_props: schemas.SearchArticle, user: models
     return db_session.query(models.Article).filter(and_(
         models.Article.header.like('%'+search_props.header+'%'),
         models.Article.content.like('%'+search_props.content+'%'),
-        models.Article.author_id.like(search_props.author_id)
+        models.Article.author_id.like(search_props.author_id),
+        models.Article.id.like(search_props.id) if search_props.id else True
     )).order_by(desc(models.Article.creation_date)).all()
-
-
-# @app.post("/api/v1/get_article_by_id/:id")
-# def get_article_by_id(id: int):
-#

@@ -76,10 +76,13 @@ class ArticleForAdd(BaseModel):
 
 
 class SearchArticle(BaseModel):
+    id: Optional[int]
     header: Optional[str]
     content: Optional[str]
     author_id: Optional[str]
     status: int = models.ModerationStatus.published.value
+    offset: Optional[int] = 0
+    count: Optional[int] = 15
 
 
 class Article(BaseModel):
