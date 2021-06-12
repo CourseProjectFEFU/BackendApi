@@ -69,3 +69,5 @@ def change_the_article(changing_props: schemas.Article, article_id: int, user: m
     db_session.flush()
 
     return {"result": "success"}
+
+

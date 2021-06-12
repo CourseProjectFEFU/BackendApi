@@ -68,6 +68,10 @@ class Article(Base):
     status = Column(
         Enum(ModerationStatus), nullable=False, default=ModerationStatus.waiting
     )
+    
+    
+class ArticleWithComments(Article):
+    comments = relationship("Comment")
 
 
 class ArticleWithCategories(Article):
@@ -87,6 +91,7 @@ class Comment(Base):
         Enum(ModerationStatus), default=ModerationStatus.waiting, nullable=False
     )
     author_id = Column(Integer, ForeignKey("users.id"), nullable=False)
+    article_id = Column(Integer, ForeignKey("articles.id"), nullable=False)
 
 
 class Category(Base):
