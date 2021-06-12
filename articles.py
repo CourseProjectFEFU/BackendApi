@@ -26,3 +26,5 @@ def add_article(article_model: schemas.ArticleForAdd, categories_list: List[int]
     db_session.flush()
     return {"result": "success"}
 
+
+

@@ -2,7 +2,7 @@ from typing import List
 
 from main import app, get_db, manager
 from sqlalchemy.orm.session import Session
-from sqlalchemy import and_
+from sqlalchemy import and_, desc
 from fastapi import Depends
 
 import exceptions
@@ -22,14 +22,32 @@ def get_users(search_user: schemas.UserForSearchRequest, user: models.User = Dep
     )).limit(search_user.count).offset(search_user.offset).all()
 
 
-@app.post("api/v1/search_article", response_model=List[schemas.Article])
-def search_article(search_props: schemas.SearchArticle, user: models.User = Depends(manager),
+@app.post("/api/v1/search_articles_ordianry", response_model=List[schemas.Article])
+def search_article_ordinary(search_props: schemas.SearchArticle, user: models.User = Depends(manager),
                    db_session: Session = Depends(get_db)):
-    if search_props.status != models.ModerationStatus.published and user.type < models.UserType.moderator.value:
+    if search_props.status != models.ModerationStatus.published:
         raise exceptions.PermissionDenied
 
     return db_session.query(models.Article).filter(and_(
         models.Article.header.like('%'+search_props.header+'%'),
         models.Article.content.like('%'+search_props.content+'%'),
         models.Article.author_id.like(search_props.author_id)
-    )).all()
+    )).order_by(desc(models.Article.publication_date)).all()
+
+
+@app.post("/api/v1/search_articles_moderation", response_model=List[schemas.Article])
+def search_articles_moderation(search_props: schemas.SearchArticle, user: models.User = Depends(manager),
+                               db_session: Session = Depends(get_db)):
+    if user.type.value < models.UserType.moderator.value:
+        raise exceptions.PermissionDenied
+
+    return db_session.query(models.Article).filter(and_(
+        models.Article.header.like('%'+search_props.header+'%'),
+        models.Article.content.like('%'+search_props.content+'%'),
+        models.Article.author_id.like(search_props.author_id)
+    )).order_by(desc(models.Article.creation_date)).all()
+
+
+# @app.post("/api/v1/get_article_by_id/:id")
+# def get_article_by_id(id: int):
+#

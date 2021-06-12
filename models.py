@@ -7,7 +7,6 @@ from sqlalchemy import (
     Boolean,
     DateTime,
     ForeignKey,
-    Binary,
     Float,
     Table,
     Text,
@@ -60,6 +59,7 @@ class Article(Base):
     __tablename__ = "articles"
 
     id = Column(Integer, primary_key=True, nullable=False)
+    image = Column(String, nullable=False)
     header = Column(String, nullable=False)
     content = Column(Text, nullable=False)
     creation_date = Column(DateTime, nullable=False, default=datetime.now)
