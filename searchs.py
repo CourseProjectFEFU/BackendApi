@@ -48,3 +48,24 @@ def search_articles_moderation(search_props: schemas.SearchArticle, user: models
         models.Article.author_id.like(search_props.author_id),
         models.Article.id.like(search_props.id) if search_props.id else True
     )).order_by(desc(models.Article.creation_date)).all()
+
+
+@app.post("/api/v1/change_article/{article_id}", response_model=schemas.RequestResult)
+def change_the_article(changing_props: schemas.Article, article_id: int, user: models.User = Depends(manager), db_session: Session = Depends(get_db)):
+    if user.type.value < models.UserType.moderator.value:
+        raise exceptions.PermissionDenied
+
+    article = db_session.query(models.Article).filter(models.Article.id == article_id).one_or_none()
+    if article is None:
+        raise exceptions.ArticleDoesNotExists
+
+    for i in changing_props.__fields_set__:
+        if i == "status":
+            article.status = models.ModerationStatus(changing_props[i])
+        else:
+            setattr(article, i, changing_props[i])
+
+    db_session.commit()
+    db_session.flush()
+
+    return {"result": "success"}
