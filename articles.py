@@ -53,6 +53,8 @@ def change_the_article(
     for i in changing_props.__fields_set__:
         if i == "status":
             article.status = models.ModerationStatus(changing_props[i])
+            if changing_props[i] == models.ModerationStatus.published.value:
+                article.publication_date = datetime.now()
         else:
             setattr(article, i, changing_props[i])
 
