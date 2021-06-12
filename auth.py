@@ -58,8 +58,9 @@ async def login(response: JSONResponse, data: OAuth2PasswordRequestForm = Depend
         status_code=200,
         content={"result": "success", "id": user.id, "username": user.nickname},
     )
-    manager.set_cookie(response, access_token)
-    return response
+    response.set_cookie('access-token', value=access_token, httponly=True, samesite="none")
+    # manager.set_cookie(response, access_token)
+    retursn response
 
 
 @app.post("/api/v1/register", response_model=schemas.RequestResult)
