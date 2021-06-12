@@ -1,6 +1,7 @@
 import os
 import hashlib
 import models
+from datetime import timedelta
 
 from fastapi import Depends
 from fastapi.responses import JSONResponse
@@ -43,7 +44,6 @@ async def login(response: JSONResponse, data: OAuth2PasswordRequestForm = Depend
     password = data.password
 
     user: models.User = await get_user(email)
-    print(user)
     if not user:
         raise InvalidCredentialsException
     elif not verify_password(password, user.salt, user.password):
@@ -52,7 +52,7 @@ async def login(response: JSONResponse, data: OAuth2PasswordRequestForm = Depend
         raise exceptions.UserIsBanned
 
     access_token = manager.create_access_token(
-        data={"sub": user.email, "rol": user.type.value}
+        data={"sub": user.email, "rol": user.type.value}, expires=timedelta(hours=12)
     )
     response = JSONResponse(status_code=200, content={"result": "success", "id": user.id, "username": user.nickname})
     manager.set_cookie(response, access_token)
@@ -88,3 +88,21 @@ async def new_user_register(
             content={"result": "error", "error_description": "server_error"},
         )
     return JSONResponse(status_code=200, content={"result": "success"})
+
+
+@app.post("/api/v1/update_cookie")
+def update_cookie(response: JSONResponse, user: models.User = Depends(manager)):
+    access_token = manager.create_access_token (
+        data={"sub": user.email, "rol": user.type.value}
+    )
+    response = JSONResponse(status_code=200, content={"result": "success", "id": user.id, "username": user.nickname})
+    manager.set_cookie(response, access_token)
+    return response
+
+
+@app.get("/api/v1/logout", response_model=schemas.RequestResult)
+def logout(response: JSONResponse, user: models.User = Depends(manager)):
+    response = JSONResponse(status_code=200, content={"result": "success",
+                                                      "success_description": "Logged out successfully"})
+    manager.set_cookie(response, "")
+    return response

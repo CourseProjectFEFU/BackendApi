@@ -1,6 +1,8 @@
 from pydantic import BaseModel, Field, validator
 from typing import Optional
 import re
+from datetime import datetime
+import models
 
 # for validating an Email
 regex = "^(\w|\.|\_|\-)+[@](\w|\_|\-|\.)+[.]\w{2,3}$"
@@ -66,3 +68,28 @@ class UserForSearchRequest(UserForSearchAnswer):
 class LoginResult(RequestResult):
     id: Optional[int]
     username: Optional[int]
+
+
+class ArticleForAdd(BaseModel):
+    header: str
+    content: str
+
+
+class SearchArticle(BaseModel):
+    header: Optional[str]
+    content: Optional[str]
+    author_id: Optional[str]
+    status: int = models.ModerationStatus.published.value
+
+
+class Article(BaseModel):
+    id: int
+    header: str
+    content: str
+    creation_date: str
+    publication_date: str
+    author_id: int
+    status: int
+
+    class Config:
+        orm_mode = True

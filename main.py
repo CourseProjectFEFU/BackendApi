@@ -35,6 +35,9 @@ app.add_middleware(
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
+#Access-Control-Expose-Headers
+    expose_headers=["set-cookie"],
+
 )
 
 def get_db() -> Session:
@@ -48,6 +51,7 @@ def get_db() -> Session:
 import exceptions
 import auth
 import userTypeChange
+import articles
 import searchs
 
 
