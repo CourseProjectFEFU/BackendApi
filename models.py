@@ -95,7 +95,6 @@ class Comment(Base):
     article = relationship("ArticleWithComments")
 
 
-
 class CommentWithReplies(Comment):
     replies = relationship("Comment")
 

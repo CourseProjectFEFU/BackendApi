@@ -63,4 +63,3 @@ def change_the_article(
     db_session.flush()
 
     return {"result": "success"}
-

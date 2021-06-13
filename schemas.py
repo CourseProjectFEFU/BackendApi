@@ -114,9 +114,10 @@ class Comment(BaseModel):
     status: models.ModerationStatus
     author_id: int
     article_id: int
-    replies: List['Comment']
+    replies: List["Comment"]
 
     class Config:
         orm_mode = True
+
 
 Comment.update_forward_refs()

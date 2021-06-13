@@ -27,6 +27,10 @@ class ArticleDoesNotExists(Exception):
     pass
 
 
+class CommentDoesNotExists(Exception):
+    pass
+
+
 @app.exception_handler(NicknameAlreadyExists)
 async def nickname_already_exists_exception_handler(
     request: Request, ex: NicknameAlreadyExists
@@ -80,4 +84,14 @@ async def article_does_nor_exists_exception_handler(
     return JSONResponse(
         status_code=405,
         content={"result": "error", "error_description": "Article does not exists"},
+    )
+
+
+@app.exception_handler(CommentDoesNotExists)
+async def comment_does_not_exists_exception_handler(
+    request: Request, ex: CommentDoesNotExists
+):
+    return JSONResponse(
+        status_code=405,
+        content={"result": "error", "error_description": "Comment does not exists"},
     )

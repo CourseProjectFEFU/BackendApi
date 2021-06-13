@@ -58,8 +58,10 @@ async def login(response: JSONResponse, data: OAuth2PasswordRequestForm = Depend
         status_code=200,
         content={"result": "success", "id": user.id, "username": user.nickname},
     )
-    response.set_cookie('access-token', value=access_token, httponly=True, samesite="none", secure=True)
-    #manager.set_cookie(response, access_token)
+    response.set_cookie(
+        "access-token", value=access_token, httponly=True, samesite="none", secure=True
+    )
+    # manager.set_cookie(response, access_token)
     return response
 
 
@@ -103,8 +105,10 @@ def update_cookie(response: JSONResponse, user: models.User = Depends(manager)):
         status_code=200,
         content={"result": "success", "id": user.id, "username": user.nickname},
     )
-    #manager.set_cookie(response, access_token)
-    response.set_cookie('access-token', value=access_token, httponly=True, samesite="none", secure=True)
+    # manager.set_cookie(response, access_token)
+    response.set_cookie(
+        "access-token", value=access_token, httponly=True, samesite="none", secure=True
+    )
     return response
 
 
@@ -115,5 +119,7 @@ def logout(response: JSONResponse, user: models.User = Depends(manager)):
         content={"result": "success", "success_description": "Logged out successfully"},
     )
     # manager.set_cookie(response, "")
-    response.set_cookie('access-token', value="", httponly=True, samesite="none", secure=True)
+    response.set_cookie(
+        "access-token", value="", httponly=True, samesite="none", secure=True
+    )
     return response
