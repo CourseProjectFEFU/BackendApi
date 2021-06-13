@@ -103,7 +103,8 @@ def update_cookie(response: JSONResponse, user: models.User = Depends(manager)):
         status_code=200,
         content={"result": "success", "id": user.id, "username": user.nickname},
     )
-    manager.set_cookie(response, access_token)
+    #manager.set_cookie(response, access_token)
+    response.set_cookie('access-token', value=access_token, httponly=True, samesite="none", secure=True)
     return response
 
 
@@ -113,5 +114,6 @@ def logout(response: JSONResponse, user: models.User = Depends(manager)):
         status_code=200,
         content={"result": "success", "success_description": "Logged out successfully"},
     )
-    manager.set_cookie(response, "")
+    # manager.set_cookie(response, "")
+    response.set_cookie('access-token', value="", httponly=True, samesite="none", secure=True)
     return response
