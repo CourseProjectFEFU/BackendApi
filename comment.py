@@ -31,9 +31,16 @@ async def add_comment(comment: schemas.AddComment,
 
 @app.post("/api/v1/get_article_comments/{article_id}", response_model=List[schemas.Comment])
 async def get_article_comments(article_id: int, db_session: Session = Depends(get_db)):
-    article = db_session.query(models.Article).filter(models.ArticleWithComments.id == article_id).one()
-    comments = db_session.query(models.Comment).with_parent(article, models.ArticleWithComments.comments).filter(and_( models.Comment.reply_id == None, models.Comment.status == models.ModerationStatus.published)).all()
+    article = db_session.query(models.Article).filter(models.ArticleWithComments.id == article_id).one_or_none()
     if not article:
         raise exceptions.ArticleDoesNotExists
-    #comments = list(filter(lambda curr_article: not bool(curr_article.reply_id), comments))
+    comments = db_session.query(models.CommentWithReplies).with_parent(article, models.ArticleWithComments.comments).filter(and_(models.CommentWithReplies.reply_id == None, models.CommentWithReplies.status == models.ModerationStatus.published)).all()
+    return comments
+
+
+@app.post("/api/v1/get_comments_for_moderation", response_model=List[schemas.Comment])
+async def get_comments_for_moderation(user: models.User = Depends(manager), db_session: Session = Depends(get_db)):
+    if user.type.value < models.UserType.moderator.value:
+        raise exceptions.PermissionDenied
+    comments = db_session.query(models.Comment).filter(models.Comment.status == models.ModerationStatus.waiting).all()
     return comments
