@@ -96,3 +96,9 @@ class Article(BaseModel):
 
     class Config:
         orm_mode = True
+
+
+class AddComment(BaseModel):
+    reply_id: Optional[int]
+    content: str
+    article_id: int
