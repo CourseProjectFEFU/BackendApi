@@ -1,5 +1,5 @@
 from pydantic import BaseModel, Field, validator
-from typing import Optional
+from typing import Optional, List
 import re
 from datetime import datetime
 import models
@@ -71,15 +71,16 @@ class LoginResult(RequestResult):
 
 
 class ArticleForAdd(BaseModel):
+    image: str
     header: str
     content: str
 
 
 class SearchArticle(BaseModel):
     id: Optional[int]
-    header: Optional[str]
-    content: Optional[str]
-    author_id: Optional[str]
+    header: Optional[str] = ""
+    content: Optional[str] = ""
+    author_id: Optional[int]
     status: int = models.ModerationStatus.published.value
     offset: Optional[int] = 0
     count: Optional[int] = 15
@@ -87,12 +88,13 @@ class SearchArticle(BaseModel):
 
 class Article(BaseModel):
     id: int
+    image: str
     header: str
     content: str
-    creation_date: str
-    publication_date: str
+    creation_date: datetime
+    publication_date: Optional[datetime]
     author_id: int
-    status: int
+    status: models.ModerationStatus
 
     class Config:
         orm_mode = True
@@ -102,3 +104,19 @@ class AddComment(BaseModel):
     reply_id: Optional[int]
     content: str
     article_id: int
+
+
+class Comment(BaseModel):
+    id: int
+    reply_id: Optional[int]
+    content: str
+    creation_date: datetime
+    status: models.ModerationStatus
+    author_id: int
+    article_id: int
+    replies: List['Comment']
+
+    class Config:
+        orm_mode = True
+
+Comment.update_forward_refs()

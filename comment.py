@@ -11,6 +11,7 @@ import schemas
 import exceptions
 import models
 
+
 @app.post("/api/v1/add_comment", response_model=schemas.RequestResult)
 async def add_comment(comment: schemas.AddComment,
                       user: models.User = Depends(manager),
@@ -25,3 +26,10 @@ async def add_comment(comment: schemas.AddComment,
     db_session.flush()
 
     return {"result": "success"}
+
+
+@app.post("/api/v1/get_article_comments/{article_id}", response_model=List[schemas.Comment])
+async def get_article_comments(article_id: int, db_session: Session = Depends(get_db)):
+    article = db_session.query(models.ArticleWithComments).filter(models.ArticleWithComments.id == article_id).all()
+    comments = list(filter(lambda curr_article: not bool(curr_article.reply_id), article[0].comments))
+    return comments

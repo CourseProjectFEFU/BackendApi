@@ -23,6 +23,7 @@ def add_article(
     article.header = article_model.header
     article.content = article_model.content
     article.author_id = user.id
+    article.image = article_model.image
     if user.type.value >= models.UserType.moderator.value:
         article.status = models.ModerationStatus.published
         article.publication_date = datetime.now()

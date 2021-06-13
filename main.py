@@ -52,6 +52,7 @@ import auth
 import userTypeChange
 import articles
 import searchs
+import comment
 
 
 @app.get("/")

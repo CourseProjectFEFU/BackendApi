@@ -59,7 +59,7 @@ async def login(response: JSONResponse, data: OAuth2PasswordRequestForm = Depend
         content={"result": "success", "id": user.id, "username": user.nickname},
     )
     response.set_cookie('access-token', value=access_token, httponly=True, samesite="none", secure=True)
-    # manager.set_cookie(response, access_token)
+    #manager.set_cookie(response, access_token)
     return response
 
 

@@ -46,8 +46,8 @@ def get_users(
 def search_article_ordinary(
     search_props: schemas.SearchArticle, db_session: Session = Depends(get_db)
 ):
-    if search_props.status != models.ModerationStatus.published:
-        raise exceptions.PermissionDenied
+    # if search_props.status != models.ModerationStatus.published:
+    #     raise exceptions.PermissionDenied
 
     return (
         db_session.query(models.Article)
@@ -55,8 +55,8 @@ def search_article_ordinary(
             and_(
                 models.Article.header.like("%" + search_props.header + "%"),
                 models.Article.content.like("%" + search_props.content + "%"),
-                models.Article.author_id.like(search_props.author_id),
-                models.Article.id.like(search_props.id) if search_props.id else True,
+                (models.Article.author_id == search_props.author_id) if search_props.author_id else True,
+                (models.Article.id == search_props.id) if search_props.id else True,
             )
         )
         .order_by(desc(models.Article.publication_date))
