@@ -31,7 +31,7 @@ class CreateUser(User):
     @validator("password")
     def validate_password(cls, value):
         if re.fullmatch(
-            "^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!#%*?&]{6,20}$",
+            "^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*#?&.,])[A-Za-z\d@.,$!#%*?&]{6,20}$",
             value,
         ):
             return value

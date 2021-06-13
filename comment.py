@@ -7,6 +7,7 @@ from datetime import datetime
 from typing import List
 
 from main import app, get_db, manager
+
 import schemas
 import exceptions
 import models
@@ -31,5 +32,7 @@ async def add_comment(comment: schemas.AddComment,
 @app.post("/api/v1/get_article_comments/{article_id}", response_model=List[schemas.Comment])
 async def get_article_comments(article_id: int, db_session: Session = Depends(get_db)):
     article = db_session.query(models.ArticleWithComments).filter(models.ArticleWithComments.id == article_id).all()
+    if not article:
+        raise exceptions.ArticleDoesNotExists
     comments = list(filter(lambda curr_article: not bool(curr_article.reply_id), article[0].comments))
     return comments
