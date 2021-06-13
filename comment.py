@@ -1,5 +1,5 @@
 from sqlalchemy.orm.session import Session
-from sqlalchemy import or_
+from sqlalchemy import or_, and_
 from fastapi import Depends
 from fastapi.responses import JSONResponse
 from datetime import datetime
@@ -31,8 +31,9 @@ async def add_comment(comment: schemas.AddComment,
 
 @app.post("/api/v1/get_article_comments/{article_id}", response_model=List[schemas.Comment])
 async def get_article_comments(article_id: int, db_session: Session = Depends(get_db)):
-    article = db_session.query(models.ArticleWithComments).filter(models.ArticleWithComments.id == article_id).all()
+    article = db_session.query(models.Article).filter(models.ArticleWithComments.id == article_id).one()
+    comments = db_session.query(models.Comment).with_parent(article, models.ArticleWithComments.comments).filter(and_( models.Comment.reply_id == None, models.Comment.status == models.ModerationStatus.published)).all()
     if not article:
         raise exceptions.ArticleDoesNotExists
-    comments = list(filter(lambda curr_article: not bool(curr_article.reply_id), article[0].comments))
+    #comments = list(filter(lambda curr_article: not bool(curr_article.reply_id), comments))
     return comments

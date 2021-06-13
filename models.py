@@ -92,6 +92,7 @@ class Comment(Base):
     )
     author_id = Column(Integer, ForeignKey("users.id"), nullable=False)
     article_id = Column(Integer, ForeignKey("articles.id"), nullable=False)
+    article = relationship("ArticleWithComments")
     replies = relationship("Comment")
 
 
