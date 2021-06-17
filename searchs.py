@@ -11,7 +11,7 @@ import schemas
 import hashlib
 
 
-@app.post("/get_users", response_model=List[schemas.UserForSearchAnswer])
+@app.post("/api/v1/get_users", response_model=List[schemas.UserForSearchAnswer])
 async def get_users(
     search_user: schemas.UserForSearchRequest,
     user: models.User = Depends(manager),
