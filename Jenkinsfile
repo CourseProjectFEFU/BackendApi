@@ -8,7 +8,7 @@ pipeline {
     stages {
         stage("Deploy Prod") {
             when {
-                branch "main"
+                branch "master"
             }
             steps {
                 echo "Stopping previous container..."
