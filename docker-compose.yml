@@ -2,7 +2,7 @@ version: '3'
 services:
   backend:
     build: .
-    container_name: bad-tripper-api
+    container_name: help_me
     ports:
       - 9876:9876
     environment:
