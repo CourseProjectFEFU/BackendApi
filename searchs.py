@@ -8,6 +8,7 @@ from fastapi import Depends
 import exceptions
 import models
 import schemas
+import hashlib
 
 
 @app.post("/get_users", response_model=List[schemas.UserForSearchAnswer])
@@ -18,7 +19,7 @@ async def get_users(
 ):
     if user.type == models.UserType.user:
         raise exceptions.PermissionDenied
-    return (
+    users: List[models.User] = (
         db_session.query(models.User)
         .filter(
             and_(
@@ -40,6 +41,12 @@ async def get_users(
         .offset(search_user.offset)
         .all()
     )
+    for user in users:
+        if user.account_image is None:
+            user.account_image = "https://www.gravatar.com/avatar/" + hashlib.md5(user.email.encode('utf-8')).hexdigest()+"?d=retro"
+    db_session.commit()
+    db_session.flush()
+    return users
 
 
 @app.post("/api/v1/search_articles_ordianry", response_model=List[schemas.Article])

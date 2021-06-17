@@ -55,6 +55,7 @@ class UserForSearchAnswer(BaseModel):
     last_name: Optional[str]
     nickname: Optional[str]
     email: Optional[str]
+    account_image: Optional[str]
 
     class Config:
         orm_mode = True
