@@ -97,7 +97,7 @@ async def new_user_register(
 
 
 @app.post("/api/v1/update_cookie")
-def update_cookie(response: JSONResponse, user: models.User = Depends(manager)):
+async def update_cookie(response: JSONResponse, user: models.User = Depends(manager)):
     access_token = manager.create_access_token(
         data={"sub": user.email, "rol": user.type.value}
     )
@@ -113,7 +113,7 @@ def update_cookie(response: JSONResponse, user: models.User = Depends(manager)):
 
 
 @app.get("/api/v1/logout", response_model=schemas.RequestResult)
-def logout(response: JSONResponse, user: models.User = Depends(manager)):
+async def logout(response: JSONResponse, user: models.User = Depends(manager)):
     response = JSONResponse(
         status_code=200,
         content={"result": "success", "success_description": "Logged out successfully"},
@@ -123,3 +123,17 @@ def logout(response: JSONResponse, user: models.User = Depends(manager)):
         "access-token", value="", httponly=True, samesite="none", secure=True
     )
     return response
+
+
+@app.post("/api/v1/change_user_data", response_model=schemas.RequestResult)
+async def change_user_data(new_user_data: schemas.User,
+                           user: models.User = Depends(manager),
+                           db_session: Session = Depends(get_db)):
+    user_from_db = db_session.query(models.User).filter(models.User.id == user.id).one()
+    user_from_db.email = new_user_data.email
+    user_from_db.nickname = new_user_data.nickname
+    user_from_db.last_name = new_user_data.last_name
+    user_from_db.first_name = new_user_data.first_name
+    db_session.commit()
+    db_session.flush()
+    return {"result": "success"}

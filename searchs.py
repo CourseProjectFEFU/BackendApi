@@ -11,7 +11,7 @@ import schemas
 
 
 @app.post("/get_users", response_model=List[schemas.UserForSearchAnswer])
-def get_users(
+async def get_users(
     search_user: schemas.UserForSearchRequest,
     user: models.User = Depends(manager),
     db_session: Session = Depends(get_db),
@@ -43,7 +43,7 @@ def get_users(
 
 
 @app.post("/api/v1/search_articles_ordianry", response_model=List[schemas.Article])
-def search_article_ordinary(
+async def search_article_ordinary(
     search_props: schemas.SearchArticle, db_session: Session = Depends(get_db)
 ):
     # if search_props.status != models.ModerationStatus.published:
@@ -67,7 +67,7 @@ def search_article_ordinary(
 
 
 @app.post("/api/v1/search_articles_moderation", response_model=List[schemas.Article])
-def search_articles_moderation(
+async def search_articles_moderation(
     search_props: schemas.SearchArticle,
     user: models.User = Depends(manager),
     db_session: Session = Depends(get_db),

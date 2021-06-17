@@ -13,7 +13,7 @@ import models
 
 
 @app.post("/api/v1/add_article", response_model=schemas.RequestResult)
-def add_article(
+async def add_article(
     article_model: schemas.ArticleForAdd,
     categories_list: List[int],
     db_session: Session = Depends(get_db),
@@ -34,7 +34,7 @@ def add_article(
 
 
 @app.post("/api/v1/change_article/{article_id}", response_model=schemas.RequestResult)
-def change_the_article(
+async def change_the_article(
     changing_props: schemas.Article,
     article_id: int,
     user: models.User = Depends(manager),
