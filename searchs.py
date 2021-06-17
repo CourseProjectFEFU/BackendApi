@@ -88,3 +88,8 @@ async def search_articles_moderation(
         .order_by(desc(models.Article.creation_date))
         .all()
     )
+
+
+@app.get("/api/v1/get_self_info", response_model=schemas.UserForSearchAnswer)
+async def get_self_info(user: models.User = Depends(manager)):
+    return user
