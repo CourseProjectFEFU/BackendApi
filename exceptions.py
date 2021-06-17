@@ -31,6 +31,10 @@ class CommentDoesNotExists(Exception):
     pass
 
 
+class UnexpectedError(Exception):
+    pass
+
+
 @app.exception_handler(NicknameAlreadyExists)
 async def nickname_already_exists_exception_handler(
     request: Request, ex: NicknameAlreadyExists
@@ -94,4 +98,14 @@ async def comment_does_not_exists_exception_handler(
     return JSONResponse(
         status_code=405,
         content={"result": "error", "error_description": "Comment does not exists"},
+    )
+
+
+@app.exception_handler(UnexpectedError)
+async def unexpected_error_exception_handler(
+        request: Request, ex: UnexpectedError
+):
+    return JSONResponse(
+        status_code=500,
+        content={"result": "error", "error_description": "Unexpected server error"}
     )
