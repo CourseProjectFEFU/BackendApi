@@ -1,0 +1,10 @@
+version: '3'
+services:
+  backend:
+    build: .
+    container_name: bad-tripper-api
+    ports:
+      - 9876:9876
+    environment:
+      PORT: 9876
+    restart: always
