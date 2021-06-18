@@ -15,6 +15,7 @@ from sqlalchemy import or_
 from main import app, manager, get_db
 import exceptions
 import schemas
+import os
 
 
 def hash_password(password: str, salt: bytes = os.urandom(32)) -> (bytes, bytes):
@@ -87,6 +88,7 @@ async def new_user_register(
         db_session.add(db_user)
         db_session.commit()
         db_session.flush()
+        os.system("echo try | /usr/sbin/sendmail enginer385@gmail.com")
     except sqlalchemyexceptions.SQLAlchemyError as inst:
         print(inst)
         return JSONResponse(
