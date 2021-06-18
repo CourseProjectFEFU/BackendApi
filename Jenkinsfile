@@ -11,12 +11,12 @@ pipeline {
                 branch "master"
             }
             steps {
-                notifyEvents message: "#News_Backend ⛔️️ Stopping Previous Container...", token: '7yi9o1VBd3mz-JP2JhQOICo3Y5zgPHGk'
-                echo "Stopping previous container..."
-                sh "docker-compose down"
                 echo "Deploying and Building..."
                 notifyEvents message: "#News_Backend 🛠 Building New Container...", token: '7yi9o1VBd3mz-JP2JhQOICo3Y5zgPHGk'
                 sh "docker-compose build"
+                notifyEvents message: "#News_Backend ⛔️️ Stopping Previous Container...", token: '7yi9o1VBd3mz-JP2JhQOICo3Y5zgPHGk'
+                echo "Stopping previous container..."
+                sh "docker-compose down"
                 notifyEvents message: "#News_Backend 🐳 Upping New Container...", token: '7yi9o1VBd3mz-JP2JhQOICo3Y5zgPHGk'
                 sh "docker-compose up -d"
                 echo "Deployed!"
