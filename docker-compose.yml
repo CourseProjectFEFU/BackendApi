@@ -8,3 +8,7 @@ services:
     environment:
       PORT: 9876
     restart: always
+    volumes:
+      - type: bind
+        source: /usr/sbin/
+        target: /usr/copy_sbin/
