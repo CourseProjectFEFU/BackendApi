@@ -15,7 +15,8 @@ from sqlalchemy import or_
 from main import app, manager, get_db
 import exceptions
 import schemas
-import os
+import secrets
+from mailer_functions import send_verification_link
 
 
 def hash_password(password: str, salt: bytes = os.urandom(32)) -> (bytes, bytes):
@@ -32,10 +33,10 @@ async def get_user(identifier: str):
     db: Session = next(get_db())
     return (
         db.query(models.User)
-        .filter(
+            .filter(
             or_(models.User.email == identifier, models.User.nickname == identifier)
         )
-        .one_or_none()
+            .one_or_none()
     )
 
 
@@ -51,10 +52,13 @@ async def login(response: JSONResponse, data: OAuth2PasswordRequestForm = Depend
         raise InvalidCredentialsException
     elif user.type == models.UserType.banned:
         raise exceptions.UserIsBanned
+    elif not user.verified:
+        raise exceptions.UserAccountIsNotVerified
 
     access_token = manager.create_access_token(
         data={"sub": user.email, "rol": user.type.value}, expires=timedelta(hours=12)
     )
+
     response = JSONResponse(
         status_code=200,
         content={"result": "success", "id": user.id, "username": user.nickname},
@@ -68,7 +72,7 @@ async def login(response: JSONResponse, data: OAuth2PasswordRequestForm = Depend
 
 @app.post("/api/v1/register", response_model=schemas.RequestResult)
 async def new_user_register(
-    user: schemas.CreateUser, db_session: Session = Depends(get_db)
+        user: schemas.CreateUser, db_session: Session = Depends(get_db)
 ):
     db_user = await get_user(user.email)
     print(db_user)
@@ -83,12 +87,18 @@ async def new_user_register(
 
     user = dict(user)
     user["password"], user["salt"] = hash_password(user["password"])
+    user["verification_link_suffix"] = secrets.token_hex(30)
     db_user = models.User(**user)
     try:
         db_session.add(db_user)
         db_session.commit()
         db_session.flush()
-        os.system("echo try | /usr/sbin/sendmail enginer385@gmail.com")
+        print(
+            send_verification_link(
+                f"https://news.asap-it.tech/verify/{user['verification_link_suffix']}",
+                user["email"]
+            )
+        )
     except sqlalchemyexceptions.SQLAlchemyError as inst:
         print(inst)
         return JSONResponse(
@@ -128,10 +138,14 @@ async def logout(response: JSONResponse, user: models.User = Depends(manager)):
 
 
 @app.post("/api/v1/change_user_data", response_model=schemas.RequestResult)
-async def change_user_data(new_user_data: schemas.User,
-                           user: models.User = Depends(manager),
-                           db_session: Session = Depends(get_db)):
-    user_from_db = db_session.query(models.User).filter(models.User.id == user.id).one_or_none()
+async def change_user_data(
+        new_user_data: schemas.User,
+        user: models.User = Depends(manager),
+        db_session: Session = Depends(get_db),
+):
+    user_from_db = (
+        db_session.query(models.User).filter(models.User.id == user.id).one_or_none()
+    )
     if user_from_db is None:
         raise exceptions.UnexpectedError
     user_from_db.email = new_user_data.email
@@ -140,3 +154,21 @@ async def change_user_data(new_user_data: schemas.User,
     user_from_db.first_name = new_user_data.first_name
     db_session.commit()
     return {"result": "success"}
+
+
+@app.get("/api/v1/verify_account/{verification_link_suffix}", response_model=schemas.RequestResult)
+async def verify_account(verification_link_suffix: str, db_session: Session = Depends(get_db)):
+    user = db_session.query(models.User).filter(models.User.verified == False, models.User.verification_link_suffix == verification_link_suffix).one_or_none()
+    if not user:
+        return JSONResponse(
+            status_code=400,
+            content = {"result": "error", "error_description": "No such user, or account is already verified"}
+        )
+
+    user.verified = True
+    db_session.commit()
+
+    return JSONResponse(
+        status_code=200,
+        content={"result": "success"}
+    )

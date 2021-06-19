@@ -35,6 +35,9 @@ class UnexpectedError(Exception):
     pass
 
 
+class UserAccountIsNotVerified(Exception):
+    pass
+
 @app.exception_handler(NicknameAlreadyExists)
 async def nickname_already_exists_exception_handler(
     request: Request, ex: NicknameAlreadyExists
@@ -103,9 +106,19 @@ async def comment_does_not_exists_exception_handler(
 
 @app.exception_handler(UnexpectedError)
 async def unexpected_error_exception_handler(
-        request: Request, ex: UnexpectedError
+    request: Request, ex: UnexpectedError
 ):
     return JSONResponse(
         status_code=500,
         content={"result": "error", "error_description": "Unexpected server error"}
+    )
+
+
+@app.exception_handler(UserAccountIsNotVerified)
+async def user_account_is_not_verified_exception_handler(
+    request: Request, ex: UserAccountIsNotVerified
+):
+    return JSONResponse(
+        status_code=401,
+        content={"result": "error", "error_description": "User account is not verified"}
     )

@@ -53,6 +53,8 @@ class User(Base):
     account_image = Column(String)
     password = Column(LargeBinary, nullable=False)
     salt = Column(LargeBinary, nullable=False)
+    verification_link_suffix = Column(String, nullable=False)
+    verified = Column(Boolean, nullable=False, default=True, unique=True)
 
 
 class Article(Base):
