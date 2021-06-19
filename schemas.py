@@ -5,7 +5,7 @@ from datetime import datetime
 import models
 
 # for validating an Email
-regex = "^(\w|\.|\_|\-)+[@](\w|\_|\-|\.)+[.]\w{2,3}$"
+regex = "^(\w|\.|\_|\-)+[@](\w|\_|\-|\.)+[.]\w{2,4}$"
 
 
 class User(BaseModel):
