@@ -1,5 +1,5 @@
 from sqlalchemy.orm.session import Session
-from sqlalchemy import or_, and_
+from sqlalchemy import or_, and_, desc
 from fastapi import Depends
 from fastapi.responses import JSONResponse
 from datetime import datetime
@@ -50,7 +50,7 @@ async def get_article_comments(article_id: int, db_session: Session = Depends(ge
                 models.CommentWithReplies.reply_id == None,
                 models.CommentWithReplies.status == models.ModerationStatus.published,
             )
-        )
+        ).order_by(desc(models.Comment.creation_date))
         .all()
     )
     return comments
@@ -65,6 +65,7 @@ async def get_comments_for_moderation(
     comments = (
         db_session.query(models.Comment)
         .filter(models.Comment.status == models.ModerationStatus.waiting)
+        .order_by(desc(models.Comments.creation_date))
         .all()
     )
     return comments

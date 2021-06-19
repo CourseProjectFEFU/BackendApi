@@ -91,7 +91,7 @@ class Comment(Base):
     content = Column(Text, nullable=False)
     creation_date = Column(DateTime, nullable=False, default=datetime.now)
     status = Column(
-        Enum(ModerationStatus), default=ModerationStatus.waiting, nullable=False
+        Enum(ModerationStatus), default=ModerationStatus.published, nullable=False
     )
     author_id = Column(Integer, ForeignKey("users.id"), nullable=False)
     article_id = Column(Integer, ForeignKey("articles.id"), nullable=False)
