@@ -171,3 +171,13 @@ async def verify_account(verification_link_suffix: str, db_session: Session = De
         status_code=200,
         content={"result": "success"}
     )
+
+
+@app.get("/api/v1/user_unsubscribed")
+async def user_unsubscribed(request, db_session: Session = Depends(get_db)):
+    email = request.data.email.recipient.email
+    user: models.User = db_session.query(models.User).filter(models.User.email == email).one_or_none()
+    if user:
+        user.subscribed = False
+        db_session.commit()
+    return {"result": "success"}
