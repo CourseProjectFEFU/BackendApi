@@ -54,7 +54,7 @@ class User(Base):
     password = Column(LargeBinary, nullable=False)
     salt = Column(LargeBinary, nullable=False)
     verification_link_suffix = Column(String, nullable=False)
-    verified = Column(Boolean, nullable=False, default=True, unique=True)
+    verified = Column(Boolean, nullable=False, default=False, unique=True)
 
 
 class Article(Base):
