@@ -50,7 +50,8 @@ async def get_article_comments(article_id: int, db_session: Session = Depends(ge
                 models.CommentWithReplies.reply_id == None,
                 models.CommentWithReplies.status == models.ModerationStatus.published,
             )
-        ).order_by(desc(models.Comment.creation_date))
+        )
+        .order_by(desc(models.Comment.creation_date))
         .all()
     )
     return comments

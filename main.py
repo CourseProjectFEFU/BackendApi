@@ -26,7 +26,7 @@ origins = [
     "http://127.0.0.1:8080",
     "http://localhost:8080",
     "https://course-project-front.herokuapp.com",
-    "https://news.asap-it.tech"
+    "https://news.asap-it.tech",
 ]
 
 app.add_middleware(

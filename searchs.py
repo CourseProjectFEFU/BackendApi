@@ -43,7 +43,11 @@ async def get_users(
     )
     for user in users:
         if user.account_image is None:
-            user.account_image = "https://www.gravatar.com/avatar/" + hashlib.md5(user.email.encode('utf-8')).hexdigest()+"?d=retro"
+            user.account_image = (
+                "https://www.gravatar.com/avatar/"
+                + hashlib.md5(user.email.encode("utf-8")).hexdigest()
+                + "?d=retro"
+            )
     db_session.commit()
     db_session.flush()
     return users
