@@ -4,6 +4,7 @@ import models
 from datetime import timedelta
 
 from fastapi import Depends
+from fastapi import Request
 from fastapi.responses import JSONResponse
 from fastapi.security import OAuth2PasswordRequestForm
 from fastapi_login.exceptions import InvalidCredentialsException
@@ -173,7 +174,7 @@ async def verify_account(verification_link_suffix: str, db_session: Session = De
     )
 
 
-@app.get("/api/v1/user_unsubscribed")
+@app.post("/api/v1/user_unsubscribed")
 async def user_unsubscribed(request, db_session: Session = Depends(get_db)):
     email = request.data.email.recipient.email
     user: models.User = db_session.query(models.User).filter(models.User.email == email).one_or_none()
