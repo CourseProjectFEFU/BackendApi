@@ -55,6 +55,7 @@ class User(Base):
     salt = Column(LargeBinary, nullable=False)
     verification_link_suffix = Column(String, nullable=False, unique=True)
     verified = Column(Boolean, nullable=False, default=False)
+    subscribed = Column(Boolean, nullable=False, default=True)
 
 
 class Article(Base):

@@ -148,10 +148,9 @@ async def change_user_data(
     )
     if user_from_db is None:
         raise exceptions.UnexpectedError
-    user_from_db.email = new_user_data.email
-    user_from_db.nickname = new_user_data.nickname
     user_from_db.last_name = new_user_data.last_name
     user_from_db.first_name = new_user_data.first_name
+    user_from_db.subscribed = new_user_data.subscribed
     db_session.commit()
     return {"result": "success"}
 

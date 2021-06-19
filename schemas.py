@@ -13,6 +13,7 @@ class User(BaseModel):
     last_name: str
     nickname: str
     email: str
+    subscribed: Optional[bool]
 
     @validator("email")
     def validate_email(cls, value):
@@ -56,6 +57,7 @@ class UserForSearchAnswer(BaseModel):
     nickname: Optional[str]
     email: Optional[str]
     account_image: Optional[str]
+    subscribed: Optional[bool]
 
     class Config:
         orm_mode = True
