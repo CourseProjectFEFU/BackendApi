@@ -13,6 +13,6 @@ Subject: Подтвердите свой Email
     print(smtp.sendmail("no-reply@mail.asap-it.tech", email, text.encode("utf-8")))
 
 
-def send_briefs(emails: List[str], briefes: str):
-    subject = "Check our exciting news"
-    print(mailer.send(my_mail, emails, subject, briefes))
+# def send_briefs(emails: List[str], briefes: str):
+#     subject = "Check our exciting news"
+#     print(mailer.send(my_mail, emails, subject, briefes))
