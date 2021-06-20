@@ -3,6 +3,7 @@ from smtplib import SMTP
 
 smtp = SMTP("mail.asap-it.tech", port=465)
 
+
 def send_verification_link(verification_link: str, email: str, name: str):
     subject = "Verify your account"
     text = f"""From: ASAP NEWS <no-reply@mail.asap-it.tech>
@@ -10,7 +11,7 @@ To: {name}<{email}>
 Subject: Подтвердите свой Email
 
 Перейдите по ссылке для подтверждения почты: {verification_link}"""
-    smtp.connect(host = "mail.asap-it.tech", port=465)
+    smtp.connect(host="151.248.123.101", port=465)
     print(smtp.sendmail("no-reply@mail.asap-it.tech", email, text.encode("utf-8")))
     smtp.close()
 
