@@ -96,7 +96,7 @@ async def new_user_register(
         db_session.flush()
         print(
             send_verification_link(
-                f"https://news.asap-it.tech/verify/:{user['verification_link_suffix']}",
+                f"https://news.asap-it.tech/verify/{user['verification_link_suffix']}",
                 user["email"], user["first_name"] + " " + user["last_name"]
             )
         )
