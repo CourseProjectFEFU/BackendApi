@@ -11,7 +11,7 @@ To: {name}<{email}>
 Subject: Подтвердите свой Email
 
 Перейдите по ссылке для подтверждения почты: {verification_link}"""
-    smtp.connect(host="localhost", port=465)
+    smtp.connect(host="151.248.123.101", port=465)
     print(smtp.sendmail("no-reply@mail.asap-it.tech", email, text.encode("utf-8")))
     smtp.close()
 
