@@ -10,7 +10,9 @@ To: {name}<{email}>
 Subject: Подтвердите свой Email
 
 Перейдите по ссылке для подтверждения почты: {verification_link}"""
+    smtp.connect(host = "mail.asap-it.tech", port=465)
     print(smtp.sendmail("no-reply@mail.asap-it.tech", email, text.encode("utf-8")))
+    smtp.close()
 
 
 def send_briefs(emails: List[str], briefes: str):
