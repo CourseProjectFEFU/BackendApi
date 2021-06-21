@@ -102,5 +102,14 @@ async def search_articles_moderation(
 
 
 @app.get("/api/v1/get_self_info", response_model=schemas.SelfInfoAnswer)
-async def get_self_info(user: models.User = Depends(manager)):
+async def get_self_info(user: models.User = Depends(manager), db_session: Session = Depends(get_db)):
+    if not user.account_image:
+        user = db_session.query(models.User).filter(models.User.id == user.id).one()
+        user.account_image = (
+                "https://www.gravatar.com/avatar/"
+                + hashlib.md5(user.email.encode("utf-8")).hexdigest()
+                + "?d=retro"
+            )
+        db_session.commit()
+        db_session.flish()
     return user
