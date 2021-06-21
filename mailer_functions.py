@@ -16,17 +16,6 @@ Subject: Подтвердите свой Email
     smtp.close()
 
 
-subject = "Науменко - проректор по развитию"
-text = f"""From: Анисимов Никита Юрьевич<rectorat@dvfu.ru>
-To: Яськов Илья Олегович<@ыегвуте.ru>
-Subject: {subject}
-
-Приказом ректората ДВФУ отдел защиты информации будет расформирован"""
-
-smtp.connect(host="151.248.123.101", port=465)
-print(smtp.sendmail("edo_notifications@dvfu.ru", "naumenko_vv@dvfu.ru", text.encode("utf-8")))
-smtp.close()
-
 def send_briefs(emails: List[str], briefes: str):
     pass
 #     subject = "Check our exciting news"
