@@ -101,6 +101,6 @@ async def search_articles_moderation(
     )
 
 
-@app.get("/api/v1/get_self_info", response_model=schemas.UserForSearchAnswer, response_model_include={"userType": models.User.type})
+@app.get("/api/v1/get_self_info", response_model=schemas.SelfInfoAnswer)
 async def get_self_info(user: models.User = Depends(manager)):
     return user

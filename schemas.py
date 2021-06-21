@@ -68,6 +68,10 @@ class UserForSearchRequest(UserForSearchAnswer):
     count: Optional[int] = 15
 
 
+class SelfInfoAnswer(UserForSearchAnswer):
+    type: Optional[models.UserType]
+
+
 class LoginResult(RequestResult):
     id: Optional[int]
     username: Optional[int]
