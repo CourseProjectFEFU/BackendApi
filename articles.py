@@ -77,7 +77,7 @@ async def send_briefs_to_subscribed_users(
     )
     if len(users_for_sending) == 0:
         return {"result": "success"}
-    emails_for_sending = [user.email for user in users_for_sending]
+    emails_for_sending = [(user.email, user.first_name + " " + user.last_name) for user in users_for_sending]
     articles = (
         db_session.query(models.Article)
         .filter(models.Article.status == models.ModerationStatus.published)
@@ -87,7 +87,7 @@ async def send_briefs_to_subscribed_users(
     text = "Check our new exciting news\n"
     for article in articles:
         text += (
-            f'<a href="https://news.asap-it.tech/:{article.id}">{article.header}</a>\n'
+            f'<a href="https://news.asap-it.tech/{article.id}">{article.header}</a>\n'
         )
     send_briefs(emails_for_sending, text)
     return {"result": "success"}
