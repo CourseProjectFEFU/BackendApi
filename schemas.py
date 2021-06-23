@@ -58,6 +58,7 @@ class UserForSearchAnswer(BaseModel):
     email: Optional[str]
     account_image: Optional[str]
     subscribed: Optional[bool]
+    status: Optional[models.UserType]
 
     class Config:
         orm_mode = True

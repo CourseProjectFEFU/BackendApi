@@ -21,16 +21,16 @@ from db import Base
 
 
 class UserType(enum.Enum):
-    banned = enum.auto()
-    user = enum.auto()
-    moderator = enum.auto()
-    administrator = enum.auto()
+    banned = 0
+    user = 1
+    moderator = 2
+    administrator = 3
 
 
 class ModerationStatus(enum.Enum):
-    waiting = enum.auto()
-    published = enum.auto()
-    rejected = enum.auto()
+    waiting = 0
+    published = 1
+    rejected = 2
 
 
 article_category_association_table = Table(
