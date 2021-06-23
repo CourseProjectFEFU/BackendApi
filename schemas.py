@@ -65,6 +65,7 @@ class UserForSearchAnswer(BaseModel):
 
 
 class UserForSearchRequest(UserForSearchAnswer):
+    type: Optional[List[models.UserType]]
     offset: Optional[int] = 0
     count: Optional[int] = 15
 

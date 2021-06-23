@@ -35,7 +35,7 @@ async def get_users(
                 models.User.nickname.like("%" + search_user.nickname + "%")
                 if search_user.nickname is not None
                 else True,
-                (models.User.type == search_user.type)
+                (models.User.type in search_user.type)
                 if search_user.type is not None
                 else True,
             )
