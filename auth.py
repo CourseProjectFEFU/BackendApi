@@ -41,7 +41,7 @@ async def get_user(identifier: str):
     )
 
 
-@app.post("/api/v1/login", response_model=schemas.LoginResult)
+@app.post("/api/v1/login", response_model=schemas.LoginResult, tags=["auth/register"])
 async def login(response: JSONResponse, data: OAuth2PasswordRequestForm = Depends()):
     email = data.username
     password = data.password
@@ -71,7 +71,7 @@ async def login(response: JSONResponse, data: OAuth2PasswordRequestForm = Depend
     return response
 
 
-@app.post("/api/v1/register", response_model=schemas.RequestResult)
+@app.post("/api/v1/register", response_model=schemas.RequestResult, tags=["auth/register"])
 async def new_user_register(
         user: schemas.CreateUser, db_session: Session = Depends(get_db)
 ):
@@ -109,11 +109,14 @@ async def new_user_register(
     return JSONResponse(status_code=200, content={"result": "success"})
 
 
-@app.post("/api/v1/update_cookie")
-async def update_cookie(response: JSONResponse, user: models.User = Depends(manager)):
+@app.post("/api/v1/update_cookie", tags=["auth/register"])
+async def update_cookie(response: JSONResponse, user: models.User = Depends(manager), tags=["auth/register"]):
     access_token = manager.create_access_token(
         data={"sub": user.email, "rol": user.type.value}
     )
+    if user.type == models.UserType.banned:
+        raise exceptions.PermissionDenied
+
     response = JSONResponse(
         status_code=200,
         content={"result": "success", "id": user.id, "username": user.nickname},
@@ -125,7 +128,7 @@ async def update_cookie(response: JSONResponse, user: models.User = Depends(mana
     return response
 
 
-@app.get("/api/v1/logout", response_model=schemas.RequestResult)
+@app.get("/api/v1/logout", response_model=schemas.RequestResult, tags=["auth/register"])
 async def logout(response: JSONResponse, user: models.User = Depends(manager)):
     response = JSONResponse(
         status_code=200,
@@ -138,7 +141,7 @@ async def logout(response: JSONResponse, user: models.User = Depends(manager)):
     return response
 
 
-@app.post("/api/v1/change_user_data", response_model=schemas.RequestResult)
+@app.post("/api/v1/change_user_data", response_model=schemas.RequestResult, tags=["User data manipulation"])
 async def change_user_data(
         new_user_data: schemas.User,
         user: models.User = Depends(manager),
@@ -159,6 +162,8 @@ async def change_user_data(
 @app.get(
     "/api/v1/verify_account/{verification_link_suffix}",
     response_model=schemas.RequestResult,
+    tags=["User data manipulation"]
+
 )
 async def verify_account(
         verification_link_suffix: str, db_session: Session = Depends(get_db)

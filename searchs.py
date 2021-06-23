@@ -11,7 +11,7 @@ import schemas
 import hashlib
 
 
-@app.post("/api/v1/get_users", response_model=List[schemas.UserForSearchAnswer])
+@app.post("/api/v1/get_users", response_model=List[schemas.UserForSearchAnswer], tags=["Searchs"])
 async def get_users(
     search_user: schemas.UserForSearchRequest,
     user: models.User = Depends(manager),
@@ -56,7 +56,7 @@ async def get_users(
     return users
 
 
-@app.post("/api/v1/search_articles_ordianry", response_model=List[schemas.Article])
+@app.post("/api/v1/search_articles_ordianry", response_model=List[schemas.Article], tags=["Searchs"])
 async def search_article_ordinary(
     search_props: schemas.SearchArticle, db_session: Session = Depends(get_db)
 ):
@@ -80,7 +80,7 @@ async def search_article_ordinary(
     )
 
 
-@app.post("/api/v1/search_articles_moderation", response_model=List[schemas.Article])
+@app.post("/api/v1/search_articles_moderation", response_model=List[schemas.Article], tags=["Searchs"])
 async def search_articles_moderation(
     search_props: schemas.SearchArticle,
     user: models.User = Depends(manager),
@@ -104,7 +104,7 @@ async def search_articles_moderation(
     )
 
 
-@app.get("/api/v1/get_self_info", response_model=schemas.SelfInfoAnswer)
+@app.get("/api/v1/get_self_info", response_model=schemas.SelfInfoAnswer, tags=["User data manipulation"])
 async def get_self_info(user: models.User = Depends(manager), db_session: Session = Depends(get_db)):
     if not user.account_image:
         user = db_session.query(models.User).filter(models.User.id == user.id).one()

@@ -13,7 +13,7 @@ import models
 from mailer_functions import send_briefs
 
 
-@app.post("/api/v1/add_article", response_model=schemas.RequestResult)
+@app.post("/api/v1/add_article", response_model=schemas.RequestResult, tags=["Article manipulation"])
 async def add_article(
     article_model: schemas.ArticleForAdd,
     categories_list: List[int],
@@ -34,7 +34,7 @@ async def add_article(
     return {"result": "success"}
 
 
-@app.post("/api/v1/change_article/{article_id}", response_model=schemas.RequestResult)
+@app.post("/api/v1/change_article/{article_id}", response_model=schemas.RequestResult, tags=["Article manipulation"])
 async def change_the_article(
     changing_props: schemas.Article,
     article_id: int,
@@ -66,7 +66,7 @@ async def change_the_article(
     return {"result": "success"}
 
 
-@app.get("/api/v1/send_briefs", response_model=schemas.RequestResult)
+@app.get("/api/v1/send_briefs", response_model=schemas.RequestResult, tags=["Article manipulation"])
 async def send_briefs_to_subscribed_users(
     user: models.User = Depends(manager), db_session: Session = Depends(get_db)
 ):

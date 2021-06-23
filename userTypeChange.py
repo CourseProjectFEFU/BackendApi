@@ -9,7 +9,7 @@ import exceptions
 import models
 
 
-@app.post("/api/v1/ban_user", response_model=schemas.RequestResult)
+@app.post("/api/v1/ban_user", response_model=schemas.RequestResult, tags=["User data manipulation"])
 def ban_user(
     deleting_user: schemas.ChangingTypeUser,
     user: models.User = Depends(manager),
@@ -42,7 +42,7 @@ def ban_user(
     return JSONResponse(status_code=200, content={"result": "success"})
 
 
-@app.post("/api/v1/add_moderator", response_model=schemas.RequestResult)
+@app.post("/api/v1/add_moderator", response_model=schemas.RequestResult, tags=["User data manipulation"])
 def add_moderator(
     adding_user: schemas.ChangingTypeUser,
     user: models.User = Depends(manager),
@@ -70,7 +70,7 @@ def add_moderator(
     return JSONResponse(status_code=200, content={"result": "success"})
 
 
-@app.post("/api/v1/unban_user", response_model=schemas.RequestResult)
+@app.post("/api/v1/unban_user", response_model=schemas.RequestResult, tags=["User data manipulation"])
 async def unban_user(
     unbaning_user: schemas.ChangingTypeUser,
     user: models.User = Depends(manager),
