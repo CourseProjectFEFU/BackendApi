@@ -77,7 +77,7 @@ async def get_comments_for_moderation(
 )
 async def change_comment_status(
     comment_id: int,
-    status: models.ModerationStatus,
+    status: int,
     user: models.User = Depends(manager),
     db_session: Session = Depends(get_db),
 ):
