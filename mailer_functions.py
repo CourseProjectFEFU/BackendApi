@@ -1,5 +1,8 @@
 from typing import List, Tuple
 from smtplib import SMTP
+from email.message import EmailMessage
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
 
 smtp = SMTP("mail.asap-it.tech", port=465)
 
@@ -31,11 +34,16 @@ def send_briefs(emails: List[Tuple[str]], briefes: str):
     subject = "Наши офигенные новости"
     smtp.connect(host="151.248.123.101", port=465)
     for email_name in emails:
-        text = f"""From: ASAP NEWS<no-reply@mail.asap-it.tech>
-To: {email_name[1]}<{email_name[0]}>
-
+#         text = f"""From: ASAP NEWS<no-reply@mail.asap-it.tech>
+# To: {email_name[1]}<{email_name[0]}>
+# Content-Type: text/html
+        text = f"""
 Посомтрите на наши очешуенные новости!
 {briefes}
 """
-        smtp.sendmail("no-reply@mail.asap-it.tech", [email_name[0]], text.encode("utf-8"))
+        message = MIMEMultipart('alternative')
+        message['From'] = 'no-reply@mail.asap-it.tech'
+        message['To'] = email_name[0]
+        MIMEText(text, 'html')
+        smtp.sendmail("no-reply@mail.asap-it.tech", [email_name[0]], message.as_string())
     smtp.close()
