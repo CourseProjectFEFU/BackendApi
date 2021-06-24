@@ -37,13 +37,15 @@ def send_briefs(emails: List[Tuple[str]], briefes: str):
 #         text = f"""From: ASAP NEWS<no-reply@mail.asap-it.tech>
 # To: {email_name[1]}<{email_name[0]}>
 # Content-Type: text/html
-        text = f"""
-Посомтрите на наши очешуенные новости!
+        text = f"""Посомтрите на наши очешуенные новости!
 {briefes}
 """
         message = MIMEMultipart('alternative')
+        message['Subject'] = 'New News'
         message['From'] = 'no-reply@mail.asap-it.tech'
         message['To'] = email_name[0]
-        MIMEText(text, 'html')
+        message.attach(MIMEText(text, 'html'))
+        message.attach(MIMEText(text, 'plain'))
+        print(message.as_string())
         smtp.sendmail("no-reply@mail.asap-it.tech", [email_name[0]], message.as_string())
     smtp.close()
