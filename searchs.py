@@ -117,5 +117,5 @@ async def get_self_info(user: models.User = Depends(manager), db_session: Sessio
                 + "?d=retro"
             )
         db_session.commit()
-        db_session.flish()
+        db_session.flush()
     return user
