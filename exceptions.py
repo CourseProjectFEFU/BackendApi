@@ -39,6 +39,10 @@ class UserAccountIsNotVerified(Exception):
     pass
 
 
+class InvalidCategory(Exception):
+    pass
+
+
 @app.exception_handler(NicknameAlreadyExists)
 async def nickname_already_exists_exception_handler(
     request: Request, ex: NicknameAlreadyExists
@@ -122,5 +126,16 @@ async def user_account_is_not_verified_exception_handler(
         content={
             "result": "error",
             "error_description": "User account is not verified",
+        },
+    )
+
+
+@app.exception_handler(InvalidCategory)
+async def invalid_category_exception_handler(request: Request, ex: InvalidCategory):
+    return JSONResponse(
+        status_code=405,
+        content={
+            "result": "error",
+            "error_description": "Category does not exist"
         },
     )

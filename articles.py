@@ -29,6 +29,12 @@ async def add_article(
         article.status = models.ModerationStatus.published
         article.publication_date = datetime.now()
     db_session.add(article)
+    article_id = article.id
+    for cat_id in categories_list:
+        category = db_session.query(models.Category).filter(models.Category.id == cat_id).one_or_none()
+        if category is None:
+            raise exceptions.InvalidCategory
+        db_session.add(models.article_category_association_table(article_id= article_id, category_id=cat_id))
     db_session.commit()
     db_session.flush()
     return {"result": "success"}
