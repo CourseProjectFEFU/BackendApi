@@ -108,7 +108,12 @@ async def remove_moderator(
 ):
     if user.type.value < models.UserType.administrator.value:
         raise exceptions.PermissionDenied
-    user_from_db = db_session.query(models.User).filter(models.User.id == removing_user.identifier).one_or_none()
+    user_from_db = db_session.query(models.User).filter(
+        or_(
+            models.User.email == removing_user.identifier,
+            models.User.nickname == removing_user.identifier,
+        )
+    ).one_or_none()
     if user_from_db is None:
         raise exceptions.UnexpectedError
     user_from_db.type = models.UserType.user
