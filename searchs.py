@@ -93,6 +93,7 @@ async def search_articles_moderation(
     filters = []
     filters.append(models.Article.header.like("%" + search_props.header + "%"))
     filters.append(models.Article.content.like("%" + search_props.content + "%"))
+    filters.append(models.Article.status.in_(search_props.status))
     if search_props.author_id:
         filters.append(models.Article.author_id == search_props.author_id)
     if search_props.id:
