@@ -110,7 +110,7 @@ async def new_user_register(
 
 
 @app.post("/api/v1/update_cookie", tags=["auth/register"])
-async def update_cookie(response: JSONResponse, user: models.User = Depends(manager), tags=["auth/register"]):
+async def update_cookie(response: JSONResponse, user: models.User = Depends(manager)):
     access_token = manager.create_access_token(
         data={"sub": user.email, "rol": user.type.value}
     )
