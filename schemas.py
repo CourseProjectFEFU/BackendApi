@@ -90,7 +90,7 @@ class SearchArticle(BaseModel):
     header: Optional[str] = ""
     content: Optional[str] = ""
     author_id: Optional[int]
-    status: List[models.ModerationStatus] = [models.ModerationStatus.published.value]
+    status: List[models.ModerationStatus] = [models.ModerationStatus.published]
     offset: Optional[int] = 0
     count: Optional[int] = 15
 
