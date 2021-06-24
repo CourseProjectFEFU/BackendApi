@@ -94,6 +94,8 @@ async def send_briefs_to_subscribed_users(
         db_session.query(models.Article)
         .filter(models.Article.status == models.ModerationStatus.published)
         .order_by(desc(models.Article.publication_date))
+        .limit(10)
+        .offset(0)
         .all()
     )
     text = "Check our new exciting news\n"
