@@ -123,7 +123,7 @@ class Comment(BaseModel):
     status: models.ModerationStatus
     author_id: int
     article_id: int
-    replies: List["Comment"]
+    replies: Optional[List["Comment"]]
     author_object: Optional[UserForSearchAnswer]
 
     class Config:
