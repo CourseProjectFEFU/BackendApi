@@ -73,7 +73,7 @@ async def get_comments_for_moderation(
 
 
 @app.post(
-    "/api/v1/change_comment_status/{comment_id}", response_model=schemas.RequestResult, tags=["Comments manipulation"]
+    "/api/v1/change_comment_status/{comment_id}/{status}", response_model=schemas.RequestResult, tags=["Comments manipulation"]
 )
 async def change_comment_status(
     comment_id: int,
