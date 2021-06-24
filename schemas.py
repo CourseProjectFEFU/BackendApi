@@ -100,7 +100,7 @@ class Article(BaseModel):
     image: str
     header: str
     content: str
-    creation_date: datetime
+    creation_date: Optional[datetime]
     publication_date: Optional[datetime]
     author_id: int
     status: models.ModerationStatus
