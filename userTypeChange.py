@@ -10,7 +10,7 @@ import models
 
 
 @app.post("/api/v1/ban_user", response_model=schemas.RequestResult, tags=["User data manipulation"])
-def ban_user(
+async def ban_user(
     deleting_user: schemas.ChangingTypeUser,
     user: models.User = Depends(manager),
     db_session: Session = Depends(get_db),
@@ -43,7 +43,7 @@ def ban_user(
 
 
 @app.post("/api/v1/add_moderator", response_model=schemas.RequestResult, tags=["User data manipulation"])
-def add_moderator(
+async def add_moderator(
     adding_user: schemas.ChangingTypeUser,
     user: models.User = Depends(manager),
     db_session: Session = Depends(get_db),
