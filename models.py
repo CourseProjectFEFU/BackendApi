@@ -33,20 +33,20 @@ class ModerationStatus(enum.Enum):
     rejected = 2
 
 
-# article_category_association_table = Table(
-#     "ArticleCategoryAssociations",
-#     Base.metadata,
-#     Column("article_id", Integer, ForeignKey("articles.id")),
-#     Column("category_id", Integer, ForeignKey("categories.id")),
-# )
+article_category_association_table = Table(
+    "ArticleCategoryAssociations",
+    Base.metadata,
+    Column("article_id", Integer, ForeignKey("articles.id")),
+    Column("category_id", Integer, ForeignKey("categories.id")),
+)
 
 
-class article_category_association_table(Base):
-    __tablename__ = "ArticleCategoryAssociations"
-
-    primary = Column(Integer, primary_key=True, nullable=False)
-    article_id = Column(Integer, ForeignKey("articles.id"))
-    category_id = Column(Integer, ForeignKey("categories.id"))
+# class article_category_association_table(Base):
+#     __tablename__ = "ArticleCategoryAssociations"
+#
+#     primary = Column(Integer, primary_key=True, nullable=False)
+#     article_id = Column(Integer, ForeignKey("articles.id"))
+#     category_id = Column(Integer, ForeignKey("categories.id"))
 
 
 class User(Base):
