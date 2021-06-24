@@ -52,6 +52,7 @@ class ChangingTypeUser(BaseModel):
 
 
 class UserForSearchAnswer(BaseModel):
+    id: Optional[int]
     first_name: Optional[str]
     last_name: Optional[str]
     nickname: Optional[str]
