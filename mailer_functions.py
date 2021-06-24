@@ -45,7 +45,6 @@ def send_briefs(emails: List[Tuple[str]], briefes: str):
         message['From'] = 'no-reply@mail.asap-it.tech'
         message['To'] = email_name[0]
         message.attach(MIMEText(text, 'html'))
-        message.attach(MIMEText(text, 'plain'))
         print(message.as_string())
         smtp.sendmail("no-reply@mail.asap-it.tech", [email_name[0]], message.as_string())
     smtp.close()
