@@ -65,6 +65,7 @@ async def search_article_ordinary(
     filters = []
     filters.append(models.Article.header.like("%" + search_props.header + "%"))
     filters.append(models.Article.content.like("%" + search_props.content + "%"))
+    filters.append(models.Article.status == models.ModerationStatus.published)
     if search_props.author_id:
         filters.append(models.Article.author_id == search_props.author_id)
     if search_props.id:
