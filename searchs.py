@@ -107,7 +107,7 @@ async def search_articles_moderation(
         )
         .order_by(desc(models.Article.creation_date))
         .offset(search_props.offset)
-        .limit(search_props.limit)
+        .limit(search_props.count)
         .all()
     )
 
