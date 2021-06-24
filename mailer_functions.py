@@ -34,10 +34,7 @@ def send_briefs(emails: List[Tuple[str]], briefes: str):
     subject = "Наши офигенные новости"
     smtp.connect(host="151.248.123.101", port=465)
     for email_name in emails:
-#         text = f"""From: ASAP NEWS<no-reply@mail.asap-it.tech>
-# To: {email_name[1]}<{email_name[0]}>
-# Content-Type: text/html
-        text = f"""Посомтрите на наши очешуенные новости!
+        text = f"""Посомтрите на наши очешуенные новости!<br/>
 {briefes}
 """
         message = MIMEMultipart('alternative')
