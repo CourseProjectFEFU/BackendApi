@@ -101,7 +101,7 @@ async def send_briefs_to_subscribed_users(
     text = "Check our new exciting news\n"
     for article in articles:
         text += (
-            f'<a href="https://news.asap-it.tech/{article.id}">{article.header}</a>\n'
+            f'<a href="https://news.asap-it.tech/{article.id}">{article.header}</a><br/>'
         )
     send_briefs(emails_for_sending, text)
     return {"result": "success"}
