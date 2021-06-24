@@ -62,18 +62,18 @@ async def search_article_ordinary(
 ):
     # if search_props.status != models.ModerationStatus.published:
     #     raise exceptions.PermissionDenied
+    filters = []
+    filters.append(models.Article.header.like("%" + search_props.header + "%"))
+    filters.append(models.Article.content.like("%" + search_props.content + "%"))
+    if search_props.author_id:
+        filters.append(models.Article.author_id == search_props.author_id)
+    if search_props.id:
+        filters.append(models.Article.id == search_props.id)
 
     return (
         db_session.query(models.Article)
         .filter(
-            and_(
-                models.Article.header.like("%" + search_props.header + "%"),
-                models.Article.content.like("%" + search_props.content + "%"),
-                models.Article.author_id == search_props.author_id
-                if search_props.author_id
-                else True,
-                models.Article.id == search_props.id if search_props.id else True,
-            )
+            and_(*filters)
         )
         .order_by(desc(models.Article.publication_date))
         .all()
