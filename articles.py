@@ -58,13 +58,19 @@ async def change_the_article(
     if article is None:
         raise exceptions.ArticleDoesNotExists
 
-    for i in changing_props.__fields_set__:
-        if i == "status":
-            article.status = models.ModerationStatus(changing_props[i])
-            if changing_props[i] == models.ModerationStatus.published.value:
-                article.publication_date = datetime.now()
-        else:
-            setattr(article, i, changing_props[i])
+    # for i in changing_props.__fields_set__:
+    #     if i == "status":
+    #         article.status = models.ModerationStatus(changing_props[i])
+    #         if changing_props[i] == models.ModerationStatus.published.value:
+    #             article.publication_date = datetime.now()
+    #     else:
+    #         setattr(article, i, changing_props[i])
+    article.image = changing_props.image
+    article.header = changing_props.header
+    article.content = changing_props.content
+    article.status = changing_props.status
+    if changing_props.status.value == models.ModerationStatus.published.value:
+        article.publication_date = datetime.now()
 
     db_session.commit()
     db_session.flush()
