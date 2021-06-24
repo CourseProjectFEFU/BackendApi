@@ -44,8 +44,9 @@ class ModerationStatus(enum.Enum):
 class article_category_association_table(Base):
     __tablename__ = "ArticleCategoryAssociations"
 
+    primary = Column(Integer, primary_key=True, nullable=False)
     article_id = Column(Integer, ForeignKey("articles.id"))
-    category_id = Column(Integer, ForeignKey("categories.id")),
+    category_id = Column(Integer, ForeignKey("categories.id"))
 
 
 class User(Base):
