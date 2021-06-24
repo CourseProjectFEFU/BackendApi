@@ -98,3 +98,20 @@ async def unban_user(
     db_session.flush()
 
     return JSONResponse(status_code=200, content={"result": "success"})
+
+
+@app.post("/api/v1/remove_moderator", response_model=schemas.RequestResult, tags=["User data manipulation"])
+async def remove_moderator(
+    removing_user: schemas.ChangingTypeUser,
+    user: models.User = Depends(manager),
+    db_session: Session = Depends(get_db)
+):
+    if user.type.value < models.UserType.administrator.value:
+        raise exceptions.PermissionDenied
+    user_from_db = db_session.query(models.User).filter(models.User.id == removing_user.identifier).one_or_none()
+    if user_from_db is None:
+        raise exceptions.UnexpectedError
+    user_from_db.type = models.UserType.user
+    db_session.commit()
+    db_session.flush()
+    return {"result":"success"}
