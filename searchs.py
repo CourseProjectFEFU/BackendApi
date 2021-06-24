@@ -69,10 +69,10 @@ async def search_article_ordinary(
             and_(
                 models.Article.header.like("%" + search_props.header + "%"),
                 models.Article.content.like("%" + search_props.content + "%"),
-                (models.Article.author_id == search_props.author_id)
+                models.Article.author_id == search_props.author_id
                 if search_props.author_id
                 else True,
-                (models.Article.id == search_props.id) if search_props.id else True,
+                models.Article.id == search_props.id if search_props.id else True,
             )
         )
         .order_by(desc(models.Article.publication_date))
