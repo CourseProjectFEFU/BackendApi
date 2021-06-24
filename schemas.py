@@ -124,6 +124,7 @@ class Comment(BaseModel):
     author_id: int
     article_id: int
     replies: List["Comment"]
+    author_object: Optional[UserForSearchAnswer]
 
     class Config:
         orm_mode = True

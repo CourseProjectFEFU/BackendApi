@@ -106,6 +106,9 @@ class Comment(Base):
     article = relationship("ArticleWithComments")
 
 
+class CommentWithAuthor(Comment):
+    author_object = relationship("User")
+
 class CommentWithReplies(Comment):
     replies = relationship("Comment")
 

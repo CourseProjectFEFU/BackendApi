@@ -43,12 +43,12 @@ async def get_article_comments(article_id: int, db_session: Session = Depends(ge
     if not article:
         raise exceptions.ArticleDoesNotExists
     comments = (
-        db_session.query(models.CommentWithReplies)
+        db_session.query(models.CommentWithAuthor)
         .with_parent(article, models.ArticleWithComments.comments)
         .filter(
             and_(
-                models.CommentWithReplies.reply_id == None,
-                models.CommentWithReplies.status == models.ModerationStatus.published,
+                models.CommentWithAuthor.reply_id == None,
+                models.CommentWithAuthor.status == models.ModerationStatus.published,
             )
         )
         .order_by(desc(models.Comment.creation_date))
