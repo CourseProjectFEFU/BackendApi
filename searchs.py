@@ -75,7 +75,7 @@ async def search_article_ordinary(
         db_session.query(models.Article)
         .filter(
             and_(*filters)
-        ).offset(search_props.offset).limit(search_props.limit)
+        ).offset(search_props.offset).limit(search_props.count)
         .order_by(desc(models.Article.publication_date))
         .all()
     )
