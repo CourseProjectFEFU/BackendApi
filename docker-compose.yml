@@ -2,9 +2,14 @@ version: '3.2'
 services:
   backend:
     build: .
-    container_name: help_me
+    container_name: help_me2
     ports:
       - 9876:9876
     environment:
       PORT: 9876
     restart: always
+    networks:
+
+      default:
+
+        name: news_network
