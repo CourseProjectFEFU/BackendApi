@@ -32,7 +32,7 @@ async def add_comment(
     db_session.commit()
     db_session.flush()
 
-    return comment
+    return comment_model
 
 
 @app.post(
