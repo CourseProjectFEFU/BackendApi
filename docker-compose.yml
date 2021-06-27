@@ -9,6 +9,6 @@ services:
     environment:
       PORT: 9876
     restart: always
-    networks:
-      default:
-        name: news_network
+networks:
+  default:
+    name: news_network
