@@ -31,8 +31,9 @@ async def add_comment(
     db_session.add(comment_model)
     db_session.commit()
     db_session.flush()
+    comment_for_return = db_session.query(models.CommentWithAuthor).filter(models.CommentWithAuthor.id == comment_model.id).one()
 
-    return comment_model
+    return comment_for_return
 
 
 @app.post(
