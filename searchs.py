@@ -11,7 +11,11 @@ import schemas
 import hashlib
 
 
-@app.post("/api/v1/get_users", response_model=List[schemas.UserForSearchAnswer], tags=["Searchs"])
+@app.post(
+    "/api/v1/get_users",
+    response_model=List[schemas.UserForSearchAnswer],
+    tags=["Searchs"],
+)
 async def get_users(
     search_user: schemas.UserForSearchRequest,
     user: models.User = Depends(manager),
@@ -56,7 +60,11 @@ async def get_users(
     return users
 
 
-@app.post("/api/v1/search_articles_ordianry", response_model=List[schemas.Article], tags=["Searchs"])
+@app.post(
+    "/api/v1/search_articles_ordianry",
+    response_model=List[schemas.Article],
+    tags=["Searchs"],
+)
 async def search_article_ordinary(
     search_props: schemas.SearchArticle, db_session: Session = Depends(get_db)
 ):
@@ -73,16 +81,19 @@ async def search_article_ordinary(
 
     return (
         db_session.query(models.Article)
-        .filter(
-            and_(*filters)
-        ).order_by(desc(models.Article.publication_date))
+        .filter(and_(*filters))
+        .order_by(desc(models.Article.publication_date))
         .offset(search_props.offset)
         .limit(search_props.count)
         .all()
     )
 
 
-@app.post("/api/v1/search_articles_moderation", response_model=List[schemas.Article], tags=["Searchs"])
+@app.post(
+    "/api/v1/search_articles_moderation",
+    response_model=List[schemas.Article],
+    tags=["Searchs"],
+)
 async def search_articles_moderation(
     search_props: schemas.SearchArticle,
     user: models.User = Depends(manager),
@@ -102,9 +113,7 @@ async def search_articles_moderation(
 
     return (
         db_session.query(models.Article)
-        .filter(
-            and_(*filters)
-        )
+        .filter(and_(*filters))
         .order_by(desc(models.Article.creation_date))
         .offset(search_props.offset)
         .limit(search_props.count)
@@ -112,15 +121,21 @@ async def search_articles_moderation(
     )
 
 
-@app.get("/api/v1/get_self_info", response_model=schemas.SelfInfoAnswer, tags=["User data manipulation"])
-async def get_self_info(user: models.User = Depends(manager), db_session: Session = Depends(get_db)):
+@app.get(
+    "/api/v1/get_self_info",
+    response_model=schemas.SelfInfoAnswer,
+    tags=["User data manipulation"],
+)
+async def get_self_info(
+    user: models.User = Depends(manager), db_session: Session = Depends(get_db)
+):
     if not user.account_image:
         user = db_session.query(models.User).filter(models.User.id == user.id).one()
         user.account_image = (
-                "https://www.gravatar.com/avatar/"
-                + hashlib.md5(user.email.encode("utf-8")).hexdigest()
-                + "?d=retro"
-            )
+            "https://www.gravatar.com/avatar/"
+            + hashlib.md5(user.email.encode("utf-8")).hexdigest()
+            + "?d=retro"
+        )
         db_session.commit()
         db_session.flush()
     return user

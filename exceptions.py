@@ -134,8 +134,5 @@ async def user_account_is_not_verified_exception_handler(
 async def invalid_category_exception_handler(request: Request, ex: InvalidCategory):
     return JSONResponse(
         status_code=405,
-        content={
-            "result": "error",
-            "error_description": "Category does not exist"
-        },
+        content={"result": "error", "error_description": "Category does not exist"},
     )

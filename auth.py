@@ -34,10 +34,10 @@ async def get_user(identifier: str):
     db: Session = next(get_db())
     return (
         db.query(models.User)
-            .filter(
+        .filter(
             or_(models.User.email == identifier, models.User.nickname == identifier)
         )
-            .one_or_none()
+        .one_or_none()
     )
 
 
@@ -71,9 +71,11 @@ async def login(response: JSONResponse, data: OAuth2PasswordRequestForm = Depend
     return response
 
 
-@app.post("/api/v1/register", response_model=schemas.RequestResult, tags=["auth/register"])
+@app.post(
+    "/api/v1/register", response_model=schemas.RequestResult, tags=["auth/register"]
+)
 async def new_user_register(
-        user: schemas.CreateUser, db_session: Session = Depends(get_db)
+    user: schemas.CreateUser, db_session: Session = Depends(get_db)
 ):
     db_user = await get_user(user.email)
     print(db_user)
@@ -97,7 +99,8 @@ async def new_user_register(
         print(
             send_verification_link(
                 f"https://news.asap-it.tech/verify/{user['verification_link_suffix']}",
-                user["email"], user["first_name"] + " " + user["last_name"]
+                user["email"],
+                user["first_name"] + " " + user["last_name"],
             )
         )
     except sqlalchemyexceptions.SQLAlchemyError as inst:
@@ -141,11 +144,15 @@ async def logout(response: JSONResponse, user: models.User = Depends(manager)):
     return response
 
 
-@app.post("/api/v1/change_user_data", response_model=schemas.RequestResult, tags=["User data manipulation"])
+@app.post(
+    "/api/v1/change_user_data",
+    response_model=schemas.RequestResult,
+    tags=["User data manipulation"],
+)
 async def change_user_data(
-        new_user_data: schemas.User,
-        user: models.User = Depends(manager),
-        db_session: Session = Depends(get_db),
+    new_user_data: schemas.User,
+    user: models.User = Depends(manager),
+    db_session: Session = Depends(get_db),
 ):
     user_from_db = (
         db_session.query(models.User).filter(models.User.id == user.id).one_or_none()
@@ -162,19 +169,18 @@ async def change_user_data(
 @app.get(
     "/api/v1/verify_account/{verification_link_suffix}",
     response_model=schemas.RequestResult,
-    tags=["User data manipulation"]
-
+    tags=["User data manipulation"],
 )
 async def verify_account(
-        verification_link_suffix: str, db_session: Session = Depends(get_db)
+    verification_link_suffix: str, db_session: Session = Depends(get_db)
 ):
     user = (
         db_session.query(models.User)
-            .filter(
+        .filter(
             models.User.verified == False,
             models.User.verification_link_suffix == verification_link_suffix,
         )
-            .one_or_none()
+        .one_or_none()
     )
     if not user:
         return JSONResponse(

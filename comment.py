@@ -13,7 +13,11 @@ import exceptions
 import models
 
 
-@app.post("/api/v1/add_comment", response_model=schemas.RequestResult, tags=["Comments manipulation"])
+@app.post(
+    "/api/v1/add_comment",
+    response_model=schemas.Comment,
+    tags=["Comments manipulation"],
+)
 async def add_comment(
     comment: schemas.AddComment,
     user: models.User = Depends(manager),
@@ -28,11 +32,13 @@ async def add_comment(
     db_session.commit()
     db_session.flush()
 
-    return {"result": "success"}
+    return comment;
 
 
 @app.post(
-    "/api/v1/get_article_comments/{article_id}", response_model=List[schemas.Comment], tags=["Comments manipulation"]
+    "/api/v1/get_article_comments/{article_id}",
+    response_model=List[schemas.Comment],
+    tags=["Comments manipulation"],
 )
 async def get_article_comments(article_id: int, db_session: Session = Depends(get_db)):
     article = (
@@ -57,7 +63,12 @@ async def get_article_comments(article_id: int, db_session: Session = Depends(ge
     return comments
 
 
-@app.post("/api/v1/get_comments_for_moderation", response_model=List[schemas.Comment], tags=["Comments manipulation"], deprecated=True)
+@app.post(
+    "/api/v1/get_comments_for_moderation",
+    response_model=List[schemas.Comment],
+    tags=["Comments manipulation"],
+    deprecated=True,
+)
 async def get_comments_for_moderation(
     user: models.User = Depends(manager), db_session: Session = Depends(get_db)
 ):
@@ -73,7 +84,9 @@ async def get_comments_for_moderation(
 
 
 @app.post(
-    "/api/v1/change_comment_status/{comment_id}/{status}", response_model=schemas.RequestResult, tags=["Comments manipulation"]
+    "/api/v1/change_comment_status/{comment_id}/{status}",
+    response_model=schemas.RequestResult,
+    tags=["Comments manipulation"],
 )
 async def change_comment_status(
     comment_id: int,
